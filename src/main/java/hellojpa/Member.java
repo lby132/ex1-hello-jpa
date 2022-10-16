@@ -6,14 +6,14 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity	// JPA가 이 객체를 사용해야겠다는걸 인식함
-@TableGenerator(
+@SequenceGenerator(
     name = "MEMBER_SEQ_GENERATOR",
-    table = "MY_SEQUENCE",
-    pkColumnName = "MEMBER_SEQ", allocationSize = 1)
+    sequenceName = "MY_SEQUENCE",
+    initialValue = 1, allocationSize = 50)
 public class Member {
 
     @Id    // JPA에게 primary key를 알려줘야함
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MEMBER_SEQ_GENERATOR")
     private Long id;
 
     @Column(name = "name", updatable = false)

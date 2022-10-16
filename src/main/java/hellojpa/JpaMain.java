@@ -16,12 +16,25 @@ public class JpaMain {
 
         try {
 
-            final Member member = new Member();
-            member.setUsername("B");
+            final Member member1 = new Member();
+            member1.setUsername("A");
+
+            final Member member2 = new Member();
+            member2.setUsername("B");
+
+            final Member member3 = new Member();
+            member3.setUsername("C");
 
             System.out.println("==================");
-            em.persist(member);
-            System.out.println("member.id = " + member.getId());
+
+            em.persist(member1);
+            em.persist(member2);
+            em.persist(member3);
+
+            System.out.println("member1.id = " + member1.getId());
+            System.out.println("member2.id = " + member2.getId());
+            System.out.println("member3.id = " + member3.getId());
+
             System.out.println("==================");
 
             tx.commit();
