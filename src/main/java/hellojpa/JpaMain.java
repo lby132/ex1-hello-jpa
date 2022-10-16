@@ -16,26 +16,21 @@ public class JpaMain {
 
         try {
 
-            final Member member1 = new Member();
-            member1.setUsername("A");
+            final Team team = new Team();
+            team.setName("TeamA");
+            em.persist(team);
 
-            final Member member2 = new Member();
-            member2.setUsername("B");
+            System.out.println("team.getName() = " + team.getName());
 
-            final Member member3 = new Member();
-            member3.setUsername("C");
+            final Member member = new Member();
+            member.setUsername("member1");
+            member.setTeam(team);
+            em.persist(member);
 
-            System.out.println("==================");
+            final Member findMember = em.find(Member.class, member.getId());
 
-            em.persist(member1);
-            em.persist(member2);
-            em.persist(member3);
-
-            System.out.println("member1.id = " + member1.getId());
-            System.out.println("member2.id = " + member2.getId());
-            System.out.println("member3.id = " + member3.getId());
-
-            System.out.println("==================");
+            final Team findTeam = findMember.getTeam();
+            System.out.println("findTeam = " + findTeam.getName());
 
             tx.commit();
         } catch (Exception e) {

@@ -6,21 +6,22 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity	// JPA가 이 객체를 사용해야겠다는걸 인식함
-@SequenceGenerator(
-    name = "MEMBER_SEQ_GENERATOR",
-    sequenceName = "MY_SEQUENCE",
-    initialValue = 1, allocationSize = 50)
 public class Member {
 
     @Id    // JPA에게 primary key를 알려줘야함
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MEMBER_SEQ_GENERATOR")
+    @GeneratedValue
+    @Column(name = "MEMBER_ID")
     private Long id;
 
-    @Column(name = "name", updatable = false)
+    @Column(name = "USERNAME")
     private String username;
 
-    public Member() {
-    }
+//    @Column(name = "TEAM_ID")
+//    private Long teamId;
+
+    @ManyToOne
+    @JoinColumn(name = "TEAM_ID")
+    private Team team;
 
     public Long getId() {
         return id;
@@ -36,5 +37,13 @@ public class Member {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
     }
 }
