@@ -1,11 +1,12 @@
 package hellojpa;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity	// JPA가 이 객체를 사용해야겠다는걸 인식함
-public class Member {
+public class Member extends BaseEntity {
 
     @Id    // JPA에게 primary key를 알려줘야함
     @GeneratedValue
@@ -26,6 +27,8 @@ public class Member {
     @OneToOne
     @JoinColumn(name = "LOCKER_ID")
     private Locker locker;
+
+
 
     public Long getId() {
         return id;
