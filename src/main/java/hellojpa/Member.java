@@ -2,11 +2,9 @@ package hellojpa;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity	// JPA가 이 객체를 사용해야겠다는걸 인식함
-public class Member extends BaseEntity {
+public class Member {
 
     @Id    // JPA에게 primary key를 알려줘야함
     @GeneratedValue
@@ -16,14 +14,19 @@ public class Member extends BaseEntity {
     @Column(name = "USERNAME")
     private String username;
 
-    //@JoinColumn(name = "TEAM_ID", insertable = false, updatable = false)
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn
-    private Team team;
+    @Embedded
+    private Period workPeriod;
 
-//    @ManyToMany
-//    @JoinColumn(name = "member")
-//    private List<MemberProduct> memberProducts = new ArrayList<>();
+    @Embedded
+    private Address homeAddress;
+
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "city", column = @Column(name = "WORK_CITY")),
+            @AttributeOverride(name = "street", column = @Column(name = "WORK_STREET")),
+            @AttributeOverride(name = "zipcode", column = @Column(name = "WORK_ZIPCODE"))
+    })
+    private Address workAddress;
 
     public Long getId() {
         return id;
@@ -41,13 +44,19 @@ public class Member extends BaseEntity {
         this.username = username;
     }
 
-    public Team getTeam() {
-        return team;
+    public Period getWorkPeriod() {
+        return workPeriod;
     }
 
-    public void setTeam(Team team) {
-        this.team = team;
+    public void setWorkPeriod(Period workPeriod) {
+        this.workPeriod = workPeriod;
     }
 
+    public Address getHomeAddress() {
+        return homeAddress;
+    }
 
+    public void setHomeAddress(Address homeAddress) {
+        this.homeAddress = homeAddress;
+    }
 }
