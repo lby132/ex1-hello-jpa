@@ -1,9 +1,11 @@
 package hellojpa;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
+import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import java.util.List;
+import java.util.Set;
 
 public class JpaMain {
     public static void main(String[] args) {
@@ -15,18 +17,22 @@ public class JpaMain {
         tx.begin();
 
         try {
-            final Member member = new Member();
-            member.setUsername("member1");
-            member.setHomeAddress(new Address("homeCity", "street", "100"));
 
-            member.getFavoriteFoods().add("치킨");
-            member.getFavoriteFoods().add("족발");
-            member.getFavoriteFoods().add("피자");
+            final CriteriaBuilder cb = em.getCriteriaBuilder();
+            final CriteriaQuery<Member> query = cb.createQuery(Member.class);
 
-            member.getAddressHistory().add(new Address("old1", "street", "1000"));
-            member.getAddressHistory().add(new Address("old2", "street", "1000"));
+            final Root<Member> m = query.from(Member.class);
 
-            em.persist(member);
+            CriteriaQuery<Member> cq = query.select(m);
+
+            String username = "dsafas";
+            if (username != null) {
+                cq = cq.where(cb.equal(m.get("username"), "kim"));
+            }
+
+            final List<Member> resultList = em.createQuery(cq)
+                    .getResultList();
+
 
             tx.commit();
         } catch (Exception e) {
