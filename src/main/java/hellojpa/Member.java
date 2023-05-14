@@ -6,19 +6,35 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Entity	// JPA가 이 객체를 사용해야겠다는걸 인식함
+@Entity    // JPA가 이 객체를 사용해야겠다는걸 인식함
 public class Member {
 
     @Id    // JPA에게 primary key를 알려줘야함
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "MEMBER_ID")
     private Long id;
 
     @Column(name = "USERNAME")
     private String username;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "TEAM_ID")
+    private Team team;
+
     @Embedded
     private Address homeAddress;
+
+    // 잘 쓰진 않지만 Address같은 임베디드 타입을 중복 사용해야 할때 사용
+//    @Embedded
+//    @AttributeOverrides({
+//            @AttributeOverride(name = "city",
+//                    column = @Column(name = "WORK_CITY")),
+//            @AttributeOverride(name = "street",
+//                    column = @Column(name = "WORK_STREET")),
+//            @AttributeOverride(name = "zipcode",
+//                    column = @Column(name = "WORK_ZIPCODE"))
+//    })
+//    private Address workAddress;
 
     @ElementCollection
     @CollectionTable(name = "FAVORITE_FOOD", joinColumns = @JoinColumn(name = "MEMBER_ID"))
@@ -71,5 +87,13 @@ public class Member {
 
     public void setAddressHistory(List<AddressEntity> addressHistory) {
         this.addressHistory = addressHistory;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
     }
 }
